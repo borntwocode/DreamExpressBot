@@ -8,8 +8,8 @@ import uz.pdp.dreamexpressbot.entity.TelegramUser;
 @AllArgsConstructor
 public enum ServiceType {
 
-    SEND_FROM_HOME("\uD83C\uDFE0 Uydan zakaz berish", "\uD83C\uDFE0 Заказать из дома"),
-    SEND_TO_OFFICE("\uD83D\uDCC5 Office ga yuborish", "\uD83D\uDCC5 Отправить в офис");
+    SEND_FROM_HOME("\uD83C\uDFE0 Uydan olib ketish", "\uD83C\uDFE0 Забрать из дома"),
+    SEND_TO_OFFICE("\uD83D\uDCC5 Officega yuborib berish", "\uD83D\uDCC5 Отправить в офис");
 
     private final String uz;
     private final String ru;

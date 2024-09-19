@@ -21,15 +21,13 @@ public enum BotMessages {
 
     SERVICE_MENU_MESSAGE("""
        ❗ Agar yukingiz og'irligi:
-       ▶️ 15 kg dan kam bo'lsa, afsuski bizning xizmatlarimizdan foydalana olmaysiz.
-       ▶️ 15 - 25 kg oralig'ida bo'lsa, faqatgina 🏢 ofis xizmatimizdan foydalana olasiz.
-       ▶️ 25 kg va undan ko'p bo'lsa, ikkala 🚚 va 🏢 xizmatlarimizdan ham foydalana olasiz.
+       ▶️ 15 - 25 kg oralig'ida bo'lsa, faqatgina 🏢 ofisga yuborish xizmatidan foydalana olasiz.
+       ▶️ 25 kg va undan ko'p bo'lsa, barcha 🚚 va 🏢 xizmatlarimizdan  foydalana olasiz.
        """,
             """
             ❗ Если ваш груз весит:
-            ▶️ Меньше 15 кг, к сожалению, вы не сможете воспользоваться нашими услугами.
-            ▶️ От 15 до 25 кг, вы можете воспользоваться только нашим 🏢 офисным сервисом.
-            ▶️ Больше 25 кг, вы можете воспользоваться обоими сервисами 🚚 и 🏢.
+            ▶️ Если он составляет от 15 до 25 кг, то можно воспользоваться только службой доставки 🏢 в офис.
+            ▶️ 25 кг и более, вы можете воспользоваться всеми нашими 🚚 и 🏢 услугами.
             """),
 
     INVALID_FIRST_NAME(
