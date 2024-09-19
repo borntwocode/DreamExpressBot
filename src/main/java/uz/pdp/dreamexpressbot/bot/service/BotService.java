@@ -5,6 +5,8 @@ import uz.pdp.dreamexpressbot.entity.TelegramUser;
 
 public interface BotService {
 
+    void onStartCommand(TelegramUser user);
+
     void askLang(TelegramUser user);
 
     void getLangThenShowMenuOrRegister(TelegramUser user, String text);
@@ -40,5 +42,11 @@ public interface BotService {
     void handleOrderActions(String text);
 
     void handlePhotoMessages(TelegramUser user, PhotoSize[] photo, String text);
+
+    boolean isSubscribed(Long userId);
+
+    void promptToFollow(TelegramUser userId);
+
+    void handleSubscription(TelegramUser user, String text);
 
 }

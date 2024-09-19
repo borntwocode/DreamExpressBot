@@ -25,6 +25,16 @@ public class BotServiceImpl implements BotService {
     private final OrderService orderService;
     private final GroupService groupService;
     private final PhotoService photoService;
+    private final ChannelService channelService;
+
+    @Override
+    public void onStartCommand(TelegramUser user) {
+        if (!user.isRegistered()) {
+            askLang(user);
+        } else {
+            showMenu(user);
+        }
+    }
 
     @Override
     public void askLang(TelegramUser user) {
@@ -374,6 +384,25 @@ public class BotServiceImpl implements BotService {
         } else {
             messageService.sendMessage(user, BotMessages.INVALID_PHOTO);
             askPackagePhoto(user);
+        }
+    }
+
+    @Override
+    public boolean isSubscribed(Long userId) {
+        return channelService.isUserSubscribed(userId);
+    }
+
+    @Override
+    public void promptToFollow(TelegramUser user) {
+        messageService.sendWithButton(user, BotMessages.FOLLOW_CHANNEL.getText(), botUtils.createFollowChannelButtons(user));
+    }
+
+    @Override
+    public void handleSubscription(TelegramUser user, String text) {
+        if(isSubscribed(user.getUserId())){
+            onStartCommand(user);
+        }else{
+            messageService.sendMessage(user, BotMessages.NOT_FOLLOWED.getText());
         }
     }
 

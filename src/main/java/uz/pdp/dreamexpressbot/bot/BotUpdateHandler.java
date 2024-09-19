@@ -8,11 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import uz.pdp.dreamexpressbot.bot.service.BotService;
-import uz.pdp.dreamexpressbot.entity.Photo;
 import uz.pdp.dreamexpressbot.entity.TelegramUser;
 import uz.pdp.dreamexpressbot.entity.enums.TgState;
 import uz.pdp.dreamexpressbot.messages.BotCommands;
-import uz.pdp.dreamexpressbot.service.PhotoService;
+import uz.pdp.dreamexpressbot.messages.BotConstants;
 import uz.pdp.dreamexpressbot.service.TelegramUserService;
 
 @Service
@@ -21,7 +20,6 @@ public class BotUpdateHandler {
 
     private final BotService botService;
     private final TelegramUserService userService;
-    private final PhotoService photoService;
 
     @Async
     public void handleUpdate(Update update) {
@@ -36,20 +34,21 @@ public class BotUpdateHandler {
         String text = message.text();
         PhotoSize[] photo = message.photo();
         TelegramUser user = userService.findUser(message);
-        if (text != null && !user.getState().equals(TgState.SENDING_PHOTO)) {
-            handleTextMessages(user, text);
-        } else if (user.getState().equals(TgState.SENDING_PHOTO)) {
-            botService.handlePhotoMessages(user, photo, text);
+
+        if (botService.isSubscribed(user.getUserId())) {
+            if (text != null && !user.getState().equals(TgState.SENDING_PHOTO)) {
+                handleTextMessages(user, text);
+            } else if (user.getState().equals(TgState.SENDING_PHOTO)) {
+                botService.handlePhotoMessages(user, photo, text);
+            }
+        } else {
+            botService.promptToFollow(user);
         }
     }
 
     private void handleTextMessages(TelegramUser user, String text) {
         if (text.equals(BotCommands.START)) {
-            if (!user.isRegistered()) {
-                botService.askLang(user);
-            } else {
-                botService.showMenu(user);
-            }
+            botService.onStartCommand(user);
         } else {
             switch (user.getState()) {
                 case ENTERING_FIRST_NAME -> botService.getFirstNameAndAskPhoneNumber(user, text);
@@ -76,7 +75,9 @@ public class BotUpdateHandler {
     }
 
     private void handleDataCallbackQueries(TelegramUser user, String text) {
-        if (text.startsWith("ORDER")) {
+        if (text.startsWith(BotConstants.CHECK)) {
+            botService.handleSubscription(user, text);
+        } else if (text.startsWith("ORDER")) {
             botService.handleOrderActions(text);
         } else if (user.getState().equals(TgState.CHOOSING_LANG)) {
             botService.getLangThenShowMenuOrRegister(user, text);

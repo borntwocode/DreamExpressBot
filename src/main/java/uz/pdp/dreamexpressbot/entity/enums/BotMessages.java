@@ -21,13 +21,13 @@ public enum BotMessages {
 
     SERVICE_MENU_MESSAGE("""
        ❗ Agar yukingiz og'irligi:
-       ▶️ 15 - 25 kg oralig'ida bo'lsa, faqatgina 🏢 ofisga yuborish xizmatidan foydalana olasiz.
-       ▶️ 25 kg va undan ko'p bo'lsa, barcha 🚚 va 🏢 xizmatlarimizdan  foydalana olasiz.
+       ▶️ 15 - 25 kg oralig'ida bo'lsa, faqatgina 🏢 ofisga yuborib berish xizmatidan foydalana olasiz.
+       ▶️ 25 kg va undan ko'p bo'lsa, 🚚 uydan olib ketish va 🏢 ofisga yuborib berish xizmatlarimizdan  foydalana olasiz.
        """,
             """
-            ❗ Если ваш груз весит:
-            ▶️ Если он составляет от 15 до 25 кг, то можно воспользоваться только службой доставки 🏢 в офис.
-            ▶️ 25 кг и более, вы можете воспользоваться всеми нашими 🚚 и 🏢 услугами.
+            ❗ Если вес вашего груза:
+            ▶️ Если он составляет от 15 до 25 кг, вы можете воспользоваться только услугой 🏢 отправки в офис.
+            ▶️ Если вес 25 кг и более, вы можете воспользоваться услугами 🚚 забора груза с дома и 🏢 отправки в офис.
             """),
 
     INVALID_FIRST_NAME(
@@ -117,6 +117,14 @@ public enum BotMessages {
                 \uD83D\uDCF1 Номер: %s
                 \uD83C\uDF0D Язык: %s
                 """),
+
+    FOLLOW_CHANNEL("Botdan foydalanish uchun kanalga obuna bo'ling \uD83D\uDCE2"),
+
+    FOLLOW("📲 A'zo bo'lish", "\uD83D\uDCF2 Подписаться"),
+
+    CHECK("🔍 Tekshirish", "🔍 Проверить"),
+
+    NOT_FOLLOWED("❗ Kerakli kanalga obuna bo'lmagansiz."),
 
     HOME_ORDER_DETAILS("""
         📦 Buyurtma ma'lumotlari:

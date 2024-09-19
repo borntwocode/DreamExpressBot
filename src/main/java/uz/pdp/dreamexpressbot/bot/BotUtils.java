@@ -9,14 +9,19 @@ import uz.pdp.dreamexpressbot.entity.enums.Lang;
 import uz.pdp.dreamexpressbot.entity.enums.OrderType;
 import uz.pdp.dreamexpressbot.entity.enums.ServiceType;
 import uz.pdp.dreamexpressbot.messages.BotConstants;
+import uz.pdp.dreamexpressbot.service.ChannelService;
 import uz.pdp.dreamexpressbot.util.CityUtil;
 import java.util.UUID;
+
+import static uz.pdp.dreamexpressbot.messages.BotConstants.CHECK;
+import static uz.pdp.dreamexpressbot.messages.BotConstants.FOLLOW;
 
 @Service
 @RequiredArgsConstructor
 public class BotUtils {
 
     private final CityUtil cityUtil;
+    private final ChannelService channelService;
 
     public Keyboard createLangButtons() {
         var keyboardMarkup = new InlineKeyboardMarkup();
@@ -94,6 +99,12 @@ public class BotUtils {
                 new InlineKeyboardButton(rejectOrder).callbackData("ORDER_" + orderId + "_" + rejectOrder)
         );
         return keyboardMarkup;
+    }
+
+    public Keyboard createFollowChannelButtons(TelegramUser user) {
+        return new InlineKeyboardMarkup(
+                new InlineKeyboardButton(FOLLOW).url(channelService.getChannelUrl())
+        ).addRow(new InlineKeyboardButton(CHECK).callbackData(CHECK + "/" + user.getUserId()));
     }
 
 }
