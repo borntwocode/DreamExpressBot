@@ -26,6 +26,7 @@ public class BotServiceImpl implements BotService {
     private final GroupService groupService;
     private final PhotoService photoService;
     private final ChannelService channelService;
+    private final FaqUtil faqUtil;
 
     @Override
     public void onStartCommand(TelegramUser user) {
@@ -113,9 +114,16 @@ public class BotServiceImpl implements BotService {
             showProfileMenu(user);
         } else if (text.equals(BotMessages.ABOUT_US.getMessage(user))) {
             sendCompanyLocation(user);
+        } else if (text.equals(BotMessages.FAQ.getMessage(user))) {
+            sendFaqButtons(user);
         } else {
             resendMenuButtons(user);
         }
+    }
+
+    private void sendFaqButtons(TelegramUser user) {
+        messageService.sendWithButton(user, BotMessages.SELECT_FAQ, botUtils.createFAQButtons(user));
+        userService.changeUserState(user, TgState.SELECTING_FAQ);
     }
 
     private void showProfileMenu(TelegramUser user) {
@@ -281,8 +289,10 @@ public class BotServiceImpl implements BotService {
         String message = BotMessages.ORDER_CREATED.getMessage(user).formatted(order.getOrderNumber());
         messageService.sendWithButton(user, message, botUtils.createBackButton(user));
         switch (Objects.requireNonNull(serviceType)) {
-            case SEND_FROM_HOME -> groupService.sendHomeOrder(order, orderService.getOrderMessage(order, user.getLang()));
-            case SEND_TO_OFFICE -> groupService.sendOfficeOrder(order, orderService.getOrderMessage(order, user.getLang()));
+            case SEND_FROM_HOME ->
+                    groupService.sendHomeOrder(order, orderService.getOrderMessage(order, user.getLang()));
+            case SEND_TO_OFFICE ->
+                    groupService.sendOfficeOrder(order, orderService.getOrderMessage(order, user.getLang()));
         }
         userService.changeUserState(user, TgState.GOING_BACK_TO_MAIN_MENU);
     }
@@ -399,10 +409,33 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public void handleSubscription(TelegramUser user, String text) {
-        if(isSubscribed(user.getUserId())){
+        if (isSubscribed(user.getUserId())) {
             onStartCommand(user);
-        }else{
+        } else {
             messageService.sendMessage(user, BotMessages.NOT_FOLLOWED.getText());
+        }
+    }
+
+    @Override
+    public void handleQuestionAskGoBack(TelegramUser user, String question) {
+        if (faqUtil.containsQuestion(user, question)) {
+            String answer = faqUtil.getAnswer(user, question);
+            messageService.sendWithButton(user, answer, botUtils.createBackButton(user));
+            userService.changeUserState(user, TgState.GOING_BACK_TO_QUESTION_MENU);
+        } else if (question.equals(BotMessages.BACK.getMessage(user))) {
+            showMenu(user);
+        } else {
+            messageService.sendMessage(user, BotMessages.SELECT_FROM_FAQ);
+            sendFaqButtons(user);
+        }
+    }
+
+    @Override
+    public void handleBackToFAQMenu(TelegramUser user, String text) {
+        if (text.equals(BotMessages.BACK.getMessage(user))) {
+            sendFaqButtons(user);
+        } else {
+            messageService.sendWithButton(user, BotMessages.CLICK_BACK_BUTTON, botUtils.createBackButton(user));
         }
     }
 

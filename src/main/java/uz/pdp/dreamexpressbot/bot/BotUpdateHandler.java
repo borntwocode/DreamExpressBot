@@ -58,10 +58,12 @@ public class BotUpdateHandler {
                 case GOING_BACK_TO_SERVICE_MENU -> botService.handleBackToServiceMenu(user, text);
                 case GOING_BACK_TO_MAIN_MENU -> botService.handleBackToMainMenu(user, text);
                 case GOING_BACK_TO_PROFILE_MENU -> botService.handleBackToProfileMenu(user, text);
+                case GOING_BACK_TO_QUESTION_MENU -> botService.handleBackToFAQMenu(user, text);
                 case SUBMITTING_ORDER -> botService.handleOrder(user, text);
                 case CHOOSING_PROFILE_MENU -> botService.handleProfileMenu(user, text);
                 case CHANGING_FIRST_NAME -> botService.getFirstNameAskGoBack(user, text);
                 case CHANGING_PHONE_NUMBER -> botService.getPhoneNumberAskGoBack(user, text);
+                case SELECTING_FAQ -> botService.handleQuestionAskGoBack(user, text);
             }
         }
     }

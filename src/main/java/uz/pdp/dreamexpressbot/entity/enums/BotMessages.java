@@ -15,9 +15,10 @@ public enum BotMessages {
     MY_ORDERS("\uD83D\uDCE6 Mening buyurtmalarim", "\uD83D\uDCE6 Мои заказы"),
     PROFILE("\uD83D\uDCBC Profil", "\uD83D\uDCBC Профиль"),
     ABOUT_US("\uD83D\uDCBC Biz haqimizda", "\uD83D\uDCCB О нас"),
+    FAQ("❓ Ko'p beriladigan savollar", "❓ Часто задаваемые вопросы"),
 
     CHOOSE_FROM_MENU("\uD83D\uDCCC Menyudan tanlang:", "\uD83D\uDCCC Выберите из меню:"),
-    AVIA_NOT_SUPPORTED("\u2708\uFE0F Hurmatli mijoz, avia xizmati hozircha mavjud emas.", "\u2708\uFE0F Уважаемый клиент, авиасервис пока недоступен."),
+    AVIA_NOT_SUPPORTED("✈️ Hurmatli mijoz, avia xizmati hozircha mavjud emas.", "✈️ Уважаемый клиент, авиасервис пока недоступен."),
 
     SERVICE_MENU_MESSAGE("""
        ❗ Agar yukingiz og'irligi:
@@ -31,19 +32,21 @@ public enum BotMessages {
             """),
 
     INVALID_FIRST_NAME(
-            "\u26A0 Ism noto‘g‘ri formatda. Ismingizni katta harf bilan boshlang va kamida 3 ta harf kiriting. Raqam va belgilar ishlatilmasin.",
-            "\u26A0 Неправильный формат имени. Имя должно начинаться с заглавной буквы и содержать не менее 3 букв. Не используйте цифры или символы."
+            "⚠ Ism noto‘g‘ri formatda. Ismingizni katta harf bilan boshlang va kamida 3 ta harf kiriting. Raqam va belgilar ishlatilmasin.",
+            "⚠ Неправильный формат имени. Имя должно начинаться с заглавной буквы и содержать не менее 3 букв. Не используйте цифры или символы."
     ),
     INVALID_PHONE_NUMBER(
-            "\u26A0 Telefon raqami noto‘g‘ri formatda. Faqat O‘zbek yoki Koreya raqamlarini kiriting.",
-            "\u26A0 Неправильный формат номера телефона. Введите только узбекские или корейские номера."
+            "⚠ Telefon raqami noto‘g‘ri formatda. Faqat O‘zbek yoki Koreya raqamlarini kiriting.",
+            "⚠ Неправильный формат номера телефона. Введите только узбекские или корейские номера."
     ),
 
-    INVALID_PHOTO("\u26A0 Notog'ri format.", "\u26A0 Неправильный формат."),
+    SELECT_FROM_FAQ("🤔 Savollardan birini tanlang.", "🤔 Выберите один из вопросов."),
+
+    INVALID_PHOTO("⚠ Notog'ri format.", "⚠ Неправильный формат."),
 
     CLICK_BACK_BUTTON("⬅️ Orqaga tugmasini bosing", "⬅️ Назад нажмите"),
     BACK("⬅️ Orqaga", "⬅️ Назад"),
-    SUBMIT("\u2705 Buyurtmani tasdiqlash", "\u2705 Подтвердить заказ"),
+    SUBMIT("✅ Buyurtmani tasdiqlash", "✅ Подтвердить заказ"),
 
     CHOOSE_CITY("\uD83D\uDCCD Siz turgan shaharni tanlang:", "\uD83D\uDCCD Выберите город, в котором вы находитесь:"),
     CHOOSE_FROM_CITY("\uD83D\uDDFE Shaharlardan birini tanlang:", "\uD83D\uDDFE Выберите один из городов:"),
@@ -60,7 +63,7 @@ public enum BotMessages {
         \uD83D\uDCE6 Уважаемый клиент, ваш заказ под номером %d успешно принят. Администраторы скоро свяжутся с вами.
         """),
 
-    YOU_HAVE_NOT_ORDER("\u26A0 Siz hech qanday buyurtma qilmagansiz.", "\u26A0 Вы еще не сделали заказ."),
+    YOU_HAVE_NOT_ORDER("⚠ Siz hech qanday buyurtma qilmagansiz.", "⚠ Вы еще не сделали заказ."),
 
     CHANGE_NAME("\uD83D\uDD8A Ismni o'zgartirish", "\uD83D\uDD8A Изменить имя"),
     CHANGE_NUMBER("\uD83D\uDDE3 Raqamni o'zgartirish", "\uD83D\uDDE3 Изменить номер"),
@@ -68,7 +71,9 @@ public enum BotMessages {
 
     SEND_PHOTO("Yukingizni rasmini jo'nating", "otpravlyayte foto posilki"),
 
-    SUCCESSFULLY_CHANGED("\u2705 Muvaffaqiyatli o'zgartirildi", "\u2705 Успешно изменено"),
+    SUCCESSFULLY_CHANGED("✅ Muvaffaqiyatli o'zgartirildi", "✅ Успешно изменено"),
+
+    SELECT_FAQ("\uD83D\uDCAC Iltimos, savollardan birini tanlang", "\uD83D\uDCAC Пожалуйста, выберите один из вопросов"),
 
     RAW_HOME_ORDER_DETAILS("""
         📦 Buyurtma turi: %s

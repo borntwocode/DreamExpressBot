@@ -38,7 +38,6 @@ public class TelegramUser {
     @Enumerated(EnumType.STRING)
     private Lang lang;
 
-    @Enumerated(value = EnumType.STRING)
     private TgState state;
 
     public boolean isRegistered() {

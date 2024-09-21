@@ -49,4 +49,8 @@ public interface BotService {
 
     void handleSubscription(TelegramUser user, String text);
 
+    void handleQuestionAskGoBack(TelegramUser user, String text);
+
+    void handleBackToFAQMenu(TelegramUser user, String text);
+
 }

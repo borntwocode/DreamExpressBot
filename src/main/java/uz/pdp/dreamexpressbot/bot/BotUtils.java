@@ -3,6 +3,7 @@ package uz.pdp.dreamexpressbot.bot;
 import com.pengrad.telegrambot.model.request.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uz.pdp.dreamexpressbot.entity.FAQ;
 import uz.pdp.dreamexpressbot.entity.TelegramUser;
 import uz.pdp.dreamexpressbot.entity.enums.BotMessages;
 import uz.pdp.dreamexpressbot.entity.enums.Lang;
@@ -11,10 +12,8 @@ import uz.pdp.dreamexpressbot.entity.enums.ServiceType;
 import uz.pdp.dreamexpressbot.messages.BotConstants;
 import uz.pdp.dreamexpressbot.service.ChannelService;
 import uz.pdp.dreamexpressbot.util.CityUtil;
-import java.util.UUID;
-
-import static uz.pdp.dreamexpressbot.messages.BotConstants.CHECK;
-import static uz.pdp.dreamexpressbot.messages.BotConstants.FOLLOW;
+import uz.pdp.dreamexpressbot.util.FaqUtil;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +21,7 @@ public class BotUtils {
 
     private final CityUtil cityUtil;
     private final ChannelService channelService;
+    private final FaqUtil faqUtil;
 
     public Keyboard createLangButtons() {
         var keyboardMarkup = new InlineKeyboardMarkup();
@@ -41,7 +41,10 @@ public class BotUtils {
                 BotMessages.MY_ORDERS.getMessage(user),
                 BotMessages.PROFILE.getMessage(user)
         );
-        keyboardMarkup.addRow(BotMessages.ABOUT_US.getMessage(user));
+        keyboardMarkup.addRow(
+                BotMessages.ABOUT_US.getMessage(user),
+                BotMessages.FAQ.getMessage(user)
+        );
         return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
     }
 
@@ -103,8 +106,14 @@ public class BotUtils {
 
     public Keyboard createFollowChannelButtons(TelegramUser user) {
         return new InlineKeyboardMarkup(
-                new InlineKeyboardButton(FOLLOW).url(channelService.getChannelUrl())
-        ).addRow(new InlineKeyboardButton(CHECK).callbackData(CHECK + "/" + user.getUserId()));
+                new InlineKeyboardButton(BotConstants.FOLLOW).url(channelService.getChannelUrl())
+        ).addRow(new InlineKeyboardButton(BotConstants.CHECK).callbackData(BotConstants.CHECK + "/" + user.getUserId()));
+    }
+
+    public Keyboard createFAQButtons(TelegramUser user) {
+        String[][] questionsAsMatrix = faqUtil.getQuestionsAsMatrix(user);
+        var keyboardMarkup = new ReplyKeyboardMarkup(questionsAsMatrix);
+        return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
     }
 
 }
