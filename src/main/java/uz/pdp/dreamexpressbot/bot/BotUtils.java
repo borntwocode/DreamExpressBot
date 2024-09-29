@@ -35,7 +35,8 @@ public class BotUtils {
     public Keyboard createMenuButtons(TelegramUser user) {
         var keyboardMarkup = new ReplyKeyboardMarkup(
                 OrderType.CONTAINER.getText(),
-                OrderType.AVIA.getText()
+                OrderType.AVIA.getText()    
+
         );
         keyboardMarkup.addRow(
                 BotMessages.MY_ORDERS.getMessage(user),
