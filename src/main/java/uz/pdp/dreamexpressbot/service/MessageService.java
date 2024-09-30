@@ -2,15 +2,18 @@ package uz.pdp.dreamexpressbot.service;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.Keyboard;
-import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.SendLocation;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SendPhoto;
+import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.dreamexpressbot.bot.BotUtils;
+import uz.pdp.dreamexpressbot.entity.Location;
 import uz.pdp.dreamexpressbot.entity.TelegramUser;
 import uz.pdp.dreamexpressbot.entity.enums.BotMessages;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -20,10 +23,11 @@ public class MessageService {
     private final BotUtils botUtils;
     private final PhotoService photoService;
 
-    public void sendWithButton(TelegramUser user, String text, Keyboard buttons) {
+    public Integer sendWithButton(TelegramUser user, String text, Keyboard buttons) {
         SendMessage message = new SendMessage(user.getChatId(), text);
         message.replyMarkup(buttons);
-        telegramBot.execute(message);
+        SendResponse execute = telegramBot.execute(message);
+        return execute.message().messageId();
     }
 
     public void sendWithButton(TelegramUser user, BotMessages botMessages, Keyboard buttons) {
@@ -33,9 +37,10 @@ public class MessageService {
         telegramBot.execute(message);
     }
 
-    public void sendMessage(TelegramUser user, String text) {
+    public Integer sendMessage(TelegramUser user, String text) {
         SendMessage message = new SendMessage(user.getChatId(), text);
-        telegramBot.execute(message);
+        SendResponse execute = telegramBot.execute(message);
+        return execute.message().messageId();
     }
 
     public void sendMessage(TelegramUser user, BotMessages botMessages) {
@@ -69,6 +74,17 @@ public class MessageService {
     private void sendPhoto(SendPhoto sendPhoto, String caption) {
         sendPhoto.caption(caption);
         telegramBot.execute(sendPhoto);
+    }
+
+    public void sendLocation(Object chatId, Location location, Integer messageId) {
+        SendLocation sendLocation = new SendLocation(chatId, location.getLatitude(), location.getLongitude());
+        sendLocation.replyToMessageId(messageId);
+        telegramBot.execute(sendLocation);
+    }
+
+    public Integer sendLocation(Object chatId, Location location) {
+        SendLocation sendLocation = new SendLocation(chatId, location.getLatitude(), location.getLongitude());
+        return telegramBot.execute(sendLocation).message().messageId();
     }
 
 }

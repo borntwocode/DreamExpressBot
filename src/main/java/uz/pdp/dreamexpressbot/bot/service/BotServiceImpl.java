@@ -148,26 +148,30 @@ public class BotServiceImpl implements BotService {
         for (int i = 0; i < orders.size(); i++) {
             Order order = orders.get(i);
             String text = orderService.getOrderMessage(order, order.getUser().getLang());
+            Location location = order.getOrderDetails().getLocation();
             boolean isLastOrder = (i == orders.size() - 1);
-            sendOrderMessage(user, order, text, isLastOrder ? backButton : null);
+            Integer messageId = sendOrderMessage(user, order, text, isLastOrder ? backButton : null);
+            if(location != null) messageService.sendLocation(user.getChatId(), location, messageId);
         }
     }
 
-    private void sendOrderMessage(TelegramUser user, Order order, String text, Keyboard buttons) {
+    private Integer sendOrderMessage(TelegramUser user, Order order, String text, Keyboard buttons) {
+        Integer messageId = 0;
         boolean isOfficeService = orderService.isOfficeService(order);
         if (buttons != null) {
             if (isOfficeService) {
                 messageService.sendPhotoWithButton(user, text, buttons);
             } else {
-                messageService.sendWithButton(user, text, buttons);
+                messageId = messageService.sendWithButton(user, text, buttons);
             }
         } else {
             if (isOfficeService) {
                 messageService.sendPhoto(user, text);
             } else {
-                messageService.sendMessage(user, text);
+                messageId = messageService.sendMessage(user, text);
             }
         }
+        return messageId;
     }
 
     private void showServiceMenu(TelegramUser user) {
@@ -255,17 +259,17 @@ public class BotServiceImpl implements BotService {
             showServiceMenu(user);
         } else if (cityUtil.contains(cityName)) {
             userService.editSelectedCity(user, cityName);
-            sendOrderDetails(user);
-            userService.changeUserState(user, TgState.SUBMITTING_ORDER);
+            messageService.sendWithButton(user, BotMessages.SEND_LOCATION, botUtils.createLocationButton(user));
+            userService.changeUserState(user, TgState.SENDING_LOCATION);
         } else {
             messageService.sendMessage(user, BotMessages.CHOOSE_FROM_CITY);
             sendCitiesButtons(user);
         }
     }
 
-    public void sendOrderDetails(TelegramUser user) {
+    public Integer sendOrderDetails(TelegramUser user) {
         String message = orderService.getRawOrderMessage(user);
-        messageService.sendWithButton(user, message, botUtils.createSubmitButton(user));
+        return messageService.sendWithButton(user, message, botUtils.createSubmitButton(user));
     }
 
     @Override
@@ -437,6 +441,18 @@ public class BotServiceImpl implements BotService {
         } else {
             messageService.sendWithButton(user, BotMessages.CLICK_BACK_BUTTON, botUtils.createBackButton(user));
         }
+    }
+
+    @Override
+    public void handleLocationMessages(TelegramUser user, com.pengrad.telegrambot.model.Location location) {
+        Location customLocation = Location.builder()
+                .latitude(location.latitude())
+                .longitude(location.longitude())
+                .build();
+        userService.editLocation(user, customLocation);
+        Integer messageId = sendOrderDetails(user);
+        messageService.sendLocation(user.getChatId(), customLocation, messageId);
+        userService.changeUserState(user, TgState.SUBMITTING_ORDER);
     }
 
 }

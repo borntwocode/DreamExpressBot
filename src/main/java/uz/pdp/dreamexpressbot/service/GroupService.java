@@ -3,6 +3,7 @@ package uz.pdp.dreamexpressbot.service;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.*;
+import com.pengrad.telegrambot.response.SendResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import uz.pdp.dreamexpressbot.repo.PhotoRepo;
 @RequiredArgsConstructor
 public class GroupService {
 
+    private final MessageService messageService;
     @Value("${admin.group.chat.id}")
     private String groupChatId;
 
@@ -24,10 +26,12 @@ public class GroupService {
     private final PhotoRepo photoRepo;
 
     public void sendHomeOrder(Order order, String message) {
+        Integer messageId = messageService.sendLocation(groupChatId, order.getOrderDetails().getLocation());
         SendMessage sendMessage = new SendMessage(groupChatId, message);
         sendMessage.replyMarkup(botUtils.createOrderAdminButtons(order.getId()));
-        Integer messageId = telegramBot.execute(sendMessage).message().messageId();
-        orderService.editMessageId(order, messageId);
+        sendMessage.replyToMessageId(messageId);
+        SendResponse execute = telegramBot.execute(sendMessage);
+        orderService.editMessageId(order, execute.message().messageId());
     }
 
     public void sendOfficeOrder(Order order, String message) {

@@ -36,7 +36,6 @@ public class BotUtils {
         var keyboardMarkup = new ReplyKeyboardMarkup(
                 OrderType.CONTAINER.getText(),
                 OrderType.AVIA.getText()    
-
         );
         keyboardMarkup.addRow(
                 BotMessages.MY_ORDERS.getMessage(user),
@@ -114,6 +113,13 @@ public class BotUtils {
     public Keyboard createFAQButtons(TelegramUser user) {
         String[][] questionsAsMatrix = faqUtil.getQuestionsAsMatrix(user);
         var keyboardMarkup = new ReplyKeyboardMarkup(questionsAsMatrix);
+        return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
+    }
+
+    public Keyboard createLocationButton(TelegramUser user) {
+        var keyboardMarkup = new ReplyKeyboardMarkup(
+                new KeyboardButton(BotMessages.SHARE_LOCATION.getMessage(user)).requestLocation(true)
+        );
         return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
     }
 

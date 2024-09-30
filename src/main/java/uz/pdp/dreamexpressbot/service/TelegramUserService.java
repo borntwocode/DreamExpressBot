@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.CallbackQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.pengrad.telegrambot.model.Message;
+import uz.pdp.dreamexpressbot.entity.Location;
 import uz.pdp.dreamexpressbot.entity.Order;
 import uz.pdp.dreamexpressbot.entity.TelegramUser;
 import uz.pdp.dreamexpressbot.entity.enums.Lang;
@@ -99,6 +100,12 @@ public class TelegramUserService {
 
     public void editPhotoFilePath(TelegramUser user, String photoFilePath) {
         user.setPhotoFilePath(photoFilePath);
+        telegramUserRepo.save(user);
+    }
+
+    public void editLocation(TelegramUser user, Location location) {
+        user.setLatitude(location.getLatitude());
+        user.setLongitude(location.getLongitude());
         telegramUserRepo.save(user);
     }
 

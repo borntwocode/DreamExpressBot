@@ -1,9 +1,6 @@
 package uz.pdp.dreamexpressbot.bot;
 
-import com.pengrad.telegrambot.model.CallbackQuery;
-import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.PhotoSize;
-import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -32,6 +29,7 @@ public class BotUpdateHandler {
 
     private void handleMessage(Message message) {
         String text = message.text();
+        Location location = message.location();
         PhotoSize[] photo = message.photo();
         TelegramUser user = userService.findUser(message);
 
@@ -40,6 +38,8 @@ public class BotUpdateHandler {
                 handleTextMessages(user, text);
             } else if (user.getState().equals(TgState.SENDING_PHOTO)) {
                 botService.handlePhotoMessages(user, photo, text);
+            }else if(location != null && user.getState().equals(TgState.SENDING_LOCATION)){
+                botService.handleLocationMessages(user, location);
             }
         } else {
             botService.promptToFollow(user);

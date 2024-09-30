@@ -197,7 +197,12 @@ public enum BotMessages {
         📞 Телефон: %s
         ✉️ Электронная почта: %s
         🗺️ Адрес  : %s
-        """);
+        """),
+
+    SEND_LOCATION("Iltimos, joylashuvingizni yuboring 😊", "Пожалуйста, отправьте своё местоположение 📍"),
+
+    SHARE_LOCATION("Joylashuvni ulashish 📍", "Отправить местоположение 📍");
+
 
     private String uz;
     private String ru;

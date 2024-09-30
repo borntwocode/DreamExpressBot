@@ -6,7 +6,6 @@ import uz.pdp.dreamexpressbot.entity.*;
 import uz.pdp.dreamexpressbot.entity.enums.*;
 import uz.pdp.dreamexpressbot.repo.OrderRepo;
 import uz.pdp.dreamexpressbot.util.DateTimeUtil;
-
 import java.util.*;
 
 @Service
@@ -41,6 +40,12 @@ public class OrderService {
                 .build();
         if (serviceType == ServiceType.SEND_FROM_HOME) {
             orderDetails.setUserAddress(user.getSelectedCity());
+            orderDetails.setLocation(
+                    Location.builder()
+                            .latitude(user.getLatitude())
+                            .longitude(user.getLongitude())
+                            .build()
+            );
         } else if (serviceType == ServiceType.SEND_TO_OFFICE) {
             Photo photo = photoService.getPhoto(user.getPhotoFilePath());
             orderDetails.setPhoto(photo);
@@ -114,6 +119,5 @@ public class OrderService {
                     return orderRepo.save(order);
                 }).orElse(null);
     }
-
 
 }

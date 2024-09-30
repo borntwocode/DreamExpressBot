@@ -35,9 +35,14 @@ public class TelegramUser {
 
     private String photoFilePath;
 
+    private Float latitude;
+
+    private Float longitude;
+
     @Enumerated(EnumType.STRING)
     private Lang lang;
 
+    @Enumerated(EnumType.STRING)
     private TgState state;
 
     public boolean isRegistered() {

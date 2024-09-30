@@ -31,5 +31,4 @@ public class ValidationUtil {
                cleanedPhoneNumber.matches(regexKoreanWithCode) || cleanedPhoneNumber.matches(regexKoreanWithoutCode);
     }
 
-
 }

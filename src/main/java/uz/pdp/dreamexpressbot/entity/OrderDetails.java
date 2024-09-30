@@ -29,6 +29,9 @@ public class OrderDetails {
 
     private String userPhoneNumber;
 
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Location location;
+
     @OneToOne
     private Photo photo;
 

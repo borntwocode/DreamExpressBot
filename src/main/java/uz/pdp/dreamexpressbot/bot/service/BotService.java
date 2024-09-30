@@ -1,5 +1,6 @@
 package uz.pdp.dreamexpressbot.bot.service;
 
+import com.pengrad.telegrambot.model.Location;
 import com.pengrad.telegrambot.model.PhotoSize;
 import uz.pdp.dreamexpressbot.entity.TelegramUser;
 
@@ -52,5 +53,7 @@ public interface BotService {
     void handleQuestionAskGoBack(TelegramUser user, String text);
 
     void handleBackToFAQMenu(TelegramUser user, String text);
+
+    void handleLocationMessages(TelegramUser user, Location location);
 
 }
