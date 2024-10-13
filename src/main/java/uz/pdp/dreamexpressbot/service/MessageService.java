@@ -48,6 +48,12 @@ public class MessageService {
         SendMessage message = new SendMessage(user.getChatId(), text);
         telegramBot.execute(message);
     }
+    public void sendContact(TelegramUser user, BotMessages botMessages) {
+        String text = botMessages.getMessage(user);
+        SendMessage contact = new SendMessage(user.getChatId(), text);
+        contact.replyMarkup(botUtils.createContactButton(user));
+        telegramBot.execute(contact);
+    }
 
     public void sendLocation(TelegramUser user, Float latitude, Float longitude) {
         SendLocation sendLocation = new SendLocation(user.getChatId(), latitude, longitude);

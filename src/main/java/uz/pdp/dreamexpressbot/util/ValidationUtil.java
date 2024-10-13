@@ -15,8 +15,14 @@ public class ValidationUtil {
         return !firstname.contains(" ");
     }
 
+
+
     public static boolean checkPhoneNumber(String phoneNumber) {
         String cleanedPhoneNumber = phoneNumber.replaceAll(" ", "");
+
+        if (!cleanedPhoneNumber.startsWith("+")){
+            cleanedPhoneNumber = "+" + cleanedPhoneNumber;
+        }
 
         // Regular expressions for Uzbek numbers
         String regexUzbekWithCode = "^\\+998\\d{9}$"; // +998 followed by 9 digits

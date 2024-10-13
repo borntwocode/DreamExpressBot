@@ -7,5 +7,6 @@ public interface BotConstants {
 
     String CONFIRM_ORDER = "✅Tasdiqlash";
     String REJECT_ORDER = "❌Bekor qilish";
+    String CONTACT = "Kantaktni yuborish";
 
 }

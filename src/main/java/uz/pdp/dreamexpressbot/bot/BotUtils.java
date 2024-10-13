@@ -63,6 +63,12 @@ public class BotUtils {
         );
         return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
     }
+    public Keyboard createContactButton(TelegramUser user) {
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup(
+                new KeyboardButton(BotConstants.CONTACT).requestContact(true)
+        );
+        return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
+    }
 
     public Keyboard createCitiesButtons(TelegramUser user) {
         var keyboardMarkup = cityUtil.getCityNameMarkup();

@@ -79,7 +79,8 @@ public class BotServiceImpl implements BotService {
     }
 
     private void askPhoneNumber(TelegramUser user) {
-        messageService.sendMessage(user, BotMessages.ENTER_YOUR_PHONE_NUMBER);
+//        messageService.sendMessage(user, BotMessages.ENTER_YOUR_PHONE_NUMBER);
+        messageService.sendContact(user, BotMessages.ENTER_YOUR_PHONE_NUMBER);
         userService.changeUserState(user, TgState.ENTERING_PHONE_NUMBER);
     }
 
@@ -94,6 +95,35 @@ public class BotServiceImpl implements BotService {
             askPhoneNumber(user);
         }
     }
+    @Override
+    public void getContactAndShowMenu(TelegramUser user, String phoneNumber) {
+        if (ValidationUtil.checkPhoneNumber(phoneNumber)) {
+            userService.editPhoneNumber(user, phoneNumber);
+            messageService.sendMessage(user, BotMessages.REGISTERED);
+            showMenu(user);
+        } else {
+            messageService.sendMessage(user, BotMessages.INVALID_PHONE_NUMBER);
+            askPhoneNumber(user);
+        }
+    }
+
+//    public void getContactAndShowMenu(TelegramUser user, String phoneNumber) {
+//        // Check if phoneNumber is null
+//        if (phoneNumber == null || phoneNumber.isEmpty()) {
+//            // Handle the case when phoneNumber is missing
+//            botService.promptUserForPhoneNumber(user);
+//            return; // Stop further execution
+//        }
+//
+//        // Proceed if phoneNumber is not null
+//        if (ValidationUtil.checkPhoneNumber(phoneNumber)) {
+//            botService.showMenu(user, phoneNumber);
+//        } else {
+//            botService.promptInvalidPhoneNumber(user);
+//        }
+//    }
+
+
 
     @Override
     public void showMenu(TelegramUser user) {
