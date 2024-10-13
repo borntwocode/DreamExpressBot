@@ -78,6 +78,7 @@ public enum BotMessages {
     RAW_HOME_ORDER_DETAILS("""
         📦 Buyurtma turi: %s
         ⚙️ Servis turi: %s
+        ⚖️ Yuk og'irligi: %s
         
         👤 Buyurtmachi ma'lumotlari:
         📛 Ismi: %s
@@ -87,6 +88,7 @@ public enum BotMessages {
             """
             📦 Тип заказа: %s
             ⚙️ Тип сервиса: %s
+            ⚖️ вес груза: %s
             
             👤 Информация о заказчике:
             📛 Имя: %s
@@ -97,6 +99,7 @@ public enum BotMessages {
     RAW_OFFICE_ORDER_DETAILS("""
         📦 Buyurtma turi: %s
         ⚙️ Servis turi: %s
+        ⚖️ Yuk og'irligi: %s
         
         👤 Buyurtmachi ma'lumotlari:
         📛 Ismi: %s
@@ -105,6 +108,7 @@ public enum BotMessages {
             """
             📦 Тип заказа: %s
             ⚙️ Тип сервиса: %s
+            ⚖️ вес груза: %s
             
             👤 Информация о заказчике:
             📛 Имя: %s
@@ -136,6 +140,7 @@ public enum BotMessages {
         🔢 Raqami: %s
         📦 Turi: %s
         ⚙️ Servis turi: %s
+        ⚖️ Yuk og'irligi: %s
         📊 Holati: %s
         📅 Sanasi: %s
         ⏱️ Vaqti: %s
@@ -150,6 +155,7 @@ public enum BotMessages {
             🔢 Номер: %s
             📦 Тип: %s
             ⚙️ Тип сервиса: %s
+            ⚖️ вес груза: %s
             📊 Статус: %s
             📅 Дата: %s
             ⏱️ Время: %s
@@ -165,6 +171,7 @@ public enum BotMessages {
         🔢 Raqami: %s
         📦 Turi: %s
         ⚙️ Servis turi: %s
+        ⚖️ Yuk og'irligi: %s
         📊 Holati: %s
         📅 Sanasi: %s
         ⏱️ Vaqti: %s
@@ -178,6 +185,7 @@ public enum BotMessages {
             🔢 Номер: %s
             📦 Тип: %s
             ⚙️ Тип сервиса: %s
+            ⚖️ вес груза: %s
             📊 Статус: %s
             📅 Дата: %s
             ⏱️ Время: %s
@@ -201,7 +209,11 @@ public enum BotMessages {
 
     SEND_LOCATION("Iltimos, joylashuvingizni yuboring 😊", "Пожалуйста, отправьте своё местоположение 📍"),
 
-    SHARE_LOCATION("Joylashuvni ulashish 📍", "Отправить местоположение 📍");
+    SHARE_LOCATION("Joylashuvni ulashish 📍", "Отправить местоположение 📍"),
+    LOAD_WEIGHT("Iltimos yukingingiz og'irligini kiriting(taxminiy bo'lsa ham) ⚖\uFE0F", "Пожалуйста, укажите вес вашего груза (даже приблизительный) ⚖\uFE0F " ),
+    CONFIRM("Siz bizning xizmatimizdan foydalanishingiz mumkin ✅ ", "Вы можете воспользоваться нашим сервисом ✅"),
+    REJECT_WEIGHT("Sizning yukingiz kam‼️ va buni siz officega yuborishingiz mumkin ✅", "у вас меньше багажа, и вы можете отправить его в офис‼️" ),
+    INVALID_LOAD_WEIGHT("Iltimos, faqat haqiqiy raqamlarni kiriting.", "«Пожалуйста, вводите только допустимые числа».");
 
 
     private String uz;

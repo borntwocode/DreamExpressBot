@@ -79,26 +79,30 @@ public class BotServiceImpl implements BotService {
     }
 
     private void askPhoneNumber(TelegramUser user) {
-//        messageService.sendMessage(user, BotMessages.ENTER_YOUR_PHONE_NUMBER);
         messageService.sendContact(user, BotMessages.ENTER_YOUR_PHONE_NUMBER);
         userService.changeUserState(user, TgState.ENTERING_PHONE_NUMBER);
     }
 
-    @Override
-    public void getPhoneNumberAndShowMenu(TelegramUser user, String phoneNumber) {
-        if (ValidationUtil.checkPhoneNumber(phoneNumber)) {
-            userService.editPhoneNumber(user, phoneNumber);
-            messageService.sendMessage(user, BotMessages.REGISTERED);
-            showMenu(user);
-        } else {
-            messageService.sendMessage(user, BotMessages.INVALID_PHONE_NUMBER);
-            askPhoneNumber(user);
-        }
-    }
+//    @Override
+//    public void getContactAndShowMenu(TelegramUser user, String phoneNumber) {
+//        if (ValidationUtil.checkPhoneNumber(phoneNumber)) {
+//            userService.editPhoneNumber(user, phoneNumber);
+//            messageService.sendMessage(user, BotMessages.REGISTERED);
+//            showMenu(user);
+//        } else {
+//            messageService.sendMessage(user, BotMessages.INVALID_PHONE_NUMBER);
+//            askPhoneNumber(user);
+//        }
+//    }
+
     @Override
     public void getContactAndShowMenu(TelegramUser user, String phoneNumber) {
         if (ValidationUtil.checkPhoneNumber(phoneNumber)) {
             userService.editPhoneNumber(user, phoneNumber);
+            // Check if user's language is null and set a default if necessary
+            if (user.getLang() == null) {
+                userService.editLang(user, Lang.UZ); // assuming Lang.DEFAULT is your default language
+            }
             messageService.sendMessage(user, BotMessages.REGISTERED);
             showMenu(user);
         } else {
@@ -106,24 +110,6 @@ public class BotServiceImpl implements BotService {
             askPhoneNumber(user);
         }
     }
-
-//    public void getContactAndShowMenu(TelegramUser user, String phoneNumber) {
-//        // Check if phoneNumber is null
-//        if (phoneNumber == null || phoneNumber.isEmpty()) {
-//            // Handle the case when phoneNumber is missing
-//            botService.promptUserForPhoneNumber(user);
-//            return; // Stop further execution
-//        }
-//
-//        // Proceed if phoneNumber is not null
-//        if (ValidationUtil.checkPhoneNumber(phoneNumber)) {
-//            botService.showMenu(user, phoneNumber);
-//        } else {
-//            botService.promptInvalidPhoneNumber(user);
-//        }
-//    }
-
-
 
     @Override
     public void showMenu(TelegramUser user) {
@@ -150,6 +136,7 @@ public class BotServiceImpl implements BotService {
             resendMenuButtons(user);
         }
     }
+
 
     private void sendFaqButtons(TelegramUser user) {
         messageService.sendWithButton(user, BotMessages.SELECT_FAQ, botUtils.createFAQButtons(user));
@@ -205,9 +192,14 @@ public class BotServiceImpl implements BotService {
     }
 
     private void showServiceMenu(TelegramUser user) {
-        messageService.sendWithButton(user, BotMessages.SERVICE_MENU_MESSAGE, botUtils.createServiceButtons(user));
+
         userService.editOrderType(user, OrderType.CONTAINER.getText());
-        userService.changeUserState(user, TgState.CHOOSING_SERVICE);
+        messageService.sendMessage(user, BotMessages.SERVICE_MENU_MESSAGE);
+//        userService.changeUserState(user, TgState.CHOOSING_SERVICE);
+        messageService.sendMessage(user, BotMessages.LOAD_WEIGHT.getMessage(user));
+        userService.changeUserState(user, TgState.GOING_BACK_TO_lOAD_WEIGHT);
+
+
     }
 
     private void resendMenuButtons(TelegramUser user) {
@@ -472,7 +464,6 @@ public class BotServiceImpl implements BotService {
             messageService.sendWithButton(user, BotMessages.CLICK_BACK_BUTTON, botUtils.createBackButton(user));
         }
     }
-
     @Override
     public void handleLocationMessages(TelegramUser user, com.pengrad.telegrambot.model.Location location) {
         Location customLocation = Location.builder()
@@ -484,5 +475,32 @@ public class BotServiceImpl implements BotService {
         messageService.sendLocation(user.getChatId(), customLocation, messageId);
         userService.changeUserState(user, TgState.SUBMITTING_ORDER);
     }
+    @Override
+    public void handleBackToLoadWeight(TelegramUser user, String text) {
+        String[] numbersArray = text.trim().split("\\s+");
+        int weight = 0;
+        for (String number : numbersArray) {
+            try {
+                // Check if the string is a valid integer
+                int num = Integer.parseInt(number);
+                weight += num;
+            } catch (NumberFormatException e) {
+                messageService.sendMessage(user, BotMessages.INVALID_LOAD_WEIGHT);
+                return;
+            }
+        }
+        if (weight > 24) {
+            orderService.saveOrderDatailsWeight(user, weight);
+            messageService.sendMessage(user, BotMessages.CONFIRM.getMessage(user));
+            messageService.sendWithButton(user, BotMessages.SERVICE_MENU_MESSAGE, botUtils.createServiceButtons(user));
+            userService.changeUserState(user, TgState.CHOOSING_SERVICE);
+        } else {
+            orderService.saveOrderDatailsWeight(user, weight);
+            messageService.sendMessage(user, BotMessages.REJECT_WEIGHT.getMessage(user));
+            messageService.sendWithButton(user, BotMessages.SERVICE_MENU_MESSAGE, botUtils.createServiceOnlyOfficeButtons(user));
+            userService.changeUserState(user, TgState.CHOOSING_SERVICE);
+        }
+    }
+
 
 }

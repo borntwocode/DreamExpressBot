@@ -49,7 +49,7 @@ public class BotUpdateHandler {
     }
 
     private void handleTextMessages(TelegramUser user, String text, Contact contact) {
-        // Null check for text
+
         if (text != null) {
             if (text.equals(BotCommands.START)) {
                 botService.onStartCommand(user);
@@ -58,6 +58,7 @@ public class BotUpdateHandler {
                     case ENTERING_FIRST_NAME -> botService.getFirstNameAndAskPhoneNumber(user, text);
                     case ENTERING_PHONE_NUMBER -> botService.getContactAndShowMenu(user, contact != null ? contact.phoneNumber() : null);
                     case CHOOSING_MENU -> botService.handleMainMenu(user, text);
+                    case GOING_BACK_TO_lOAD_WEIGHT -> botService.handleBackToLoadWeight(user, text);
                     case CHOOSING_SERVICE -> botService.handleServiceMenu(user, text);
                     case GOING_BACK_TO_SERVICE_MENU -> botService.handleBackToServiceMenu(user, text);
                     case GOING_BACK_TO_MAIN_MENU -> botService.handleBackToMainMenu(user, text);
@@ -71,8 +72,6 @@ public class BotUpdateHandler {
                 }
             }
         } else if (contact != null && contact.phoneNumber()!=null) {
-            // Handle if the message is a contact message
-            System.out.println(contact.phoneNumber());
             botService.getContactAndShowMenu(user, contact.phoneNumber());
         }
     }

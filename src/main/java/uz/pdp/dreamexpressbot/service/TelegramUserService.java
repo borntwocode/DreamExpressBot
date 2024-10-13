@@ -56,22 +56,63 @@ public class TelegramUserService {
     }
 
     public void editPhoneNumber(TelegramUser user, String phoneNumber) {
-        String cleanedPhoneNumber = phoneNumber.replaceAll("\\s+", "");
-        // Determine if the number is Uzbek or Korean and add the appropriate country code if missing
-        String phoneWithCountryCode;
-        if (cleanedPhoneNumber.matches("^\\d{9}$")) {
-            phoneWithCountryCode = "+998" + cleanedPhoneNumber;
-        } else if (cleanedPhoneNumber.matches("^010\\d{7,8}$")) {
-            // Assume it's Korean if it starts with '010' and is 7 or 8 digits long
-            phoneWithCountryCode = "+82" + cleanedPhoneNumber.substring(1); // Remove leading '0' for Korean numbers
-        } else {
-            // If it already has a valid country code, leave it as is
-            phoneWithCountryCode = cleanedPhoneNumber;
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            throw new IllegalArgumentException("Phone number cannot be null or empty.");
         }
+
+        // Remove spaces from the phone number
+        String cleanedPhoneNumber = phoneNumber.replaceAll("\\s+", "");
+
+        // Regular expressions for Uzbek numbers
+        String regexUzbekWithCode = "^\\+998\\d{9}$"; // +998 followed by 9 digits
+        String regexUzbekWithoutCode = "^\\d{9}$";    // 9 digits without country code
+        String regexUzbekWithoutPlus = "^998\\d{9}$"; // 998 followed by 9 digits without the +
+
+        // Regular expressions for Korean numbers
+        String regexKoreanWithCode = "^\\+82\\d{8,10}$"; // +82 followed by 8 to 10 digits
+        String regexKoreanWithoutCode = "^010\\d{7,8}$"; // 010 followed by 7 or 8 digits
+
+        String phoneWithCountryCode;
+
+        // Check if it's a valid Uzbek number with or without country code or missing '+'
+        if (cleanedPhoneNumber.matches(regexUzbekWithoutCode)) {
+            phoneWithCountryCode = "+998" + cleanedPhoneNumber;
+        } else if (cleanedPhoneNumber.matches(regexUzbekWithCode)) {
+            phoneWithCountryCode = cleanedPhoneNumber;
+        } else if (cleanedPhoneNumber.matches(regexUzbekWithoutPlus)) {
+            phoneWithCountryCode = "+" + cleanedPhoneNumber; // Add the missing '+' sign
+        }
+        // Check if it's a valid Korean number with or without country code
+        else if (cleanedPhoneNumber.matches(regexKoreanWithoutCode)) {
+            phoneWithCountryCode = "+82" + cleanedPhoneNumber.substring(1); // Remove leading '0' for Korean numbers
+        } else if (cleanedPhoneNumber.matches(regexKoreanWithCode)) {
+            phoneWithCountryCode = cleanedPhoneNumber;
+        } else {
+            throw new IllegalArgumentException("Invalid phone number format: " + cleanedPhoneNumber);
+        }
+
         // Set and save the updated phone number
         user.setPhoneNumber(phoneWithCountryCode);
         telegramUserRepo.save(user);
     }
+
+
+//    public static boolean checkPhoneNumber(String phoneNumber) {
+//        String cleanedPhoneNumber = phoneNumber.replaceAll(" ", "");
+//
+//        // Regular expressions for Uzbek numbers
+//        String regexUzbekWithCode = "^\\+998\\d{9}$"; // +998 followed by 9 digits
+//        String regexUzbekWithoutCode = "^\\d{9}$"; // 9 digits without country code
+//
+//        // Regular expressions for Korean numbers
+//        String regexKoreanWithCode = "^\\+82\\d{8,10}$"; // +82 followed by 8 to 10 digits
+//        String regexKoreanWithoutCode = "^010\\d{7,8}$"; // 010 followed by 7 or 8 digits
+//
+//        // Check if the phone number matches any of the valid Uzbek or Korean patterns
+//        return cleanedPhoneNumber.matches(regexUzbekWithCode) || cleanedPhoneNumber.matches(regexUzbekWithoutCode) ||
+//                cleanedPhoneNumber.matches(regexKoreanWithCode) || cleanedPhoneNumber.matches(regexKoreanWithoutCode);
+//    }
+
 
     public void editOrderType(TelegramUser user, String text) {
         user.setOrderType(text);

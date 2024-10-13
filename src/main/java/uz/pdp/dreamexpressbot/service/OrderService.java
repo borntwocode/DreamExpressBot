@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import uz.pdp.dreamexpressbot.entity.*;
 import uz.pdp.dreamexpressbot.entity.enums.*;
 import uz.pdp.dreamexpressbot.repo.OrderRepo;
+import uz.pdp.dreamexpressbot.repo.TelegramUserRepo;
 import uz.pdp.dreamexpressbot.util.DateTimeUtil;
 import java.util.*;
 
@@ -14,6 +15,7 @@ public class OrderService {
 
     private final OrderRepo orderRepo;
     private final PhotoService photoService;
+    private final TelegramUserRepo telegramUserRepo;
 
     public String getRawOrderMessage(TelegramUser user) {
         ServiceType serviceType = ServiceType.getFromText(user.getServiceType());
@@ -37,6 +39,7 @@ public class OrderService {
                 .userPhoneNumber(user.getPhoneNumber())
                 .orderType(OrderType.getFromText(user.getOrderType()))
                 .serviceType(serviceType)
+                .load_weight(user.getLoad_weight())
                 .build();
         if (serviceType == ServiceType.SEND_FROM_HOME) {
             orderDetails.setUserAddress(user.getSelectedCity());
@@ -69,6 +72,7 @@ public class OrderService {
                     order.getOrderNumber(),
                     orderDetails.getOrderType().getText(),
                     orderDetails.getServiceType().getMessage(lang),
+                    orderDetails.getLoad_weight(),
                     order.getStatus().getMessage(lang),
                     DateTimeUtil.formatDate(order.getOrderDateTime()),
                     DateTimeUtil.formatTime(order.getOrderDateTime()),
@@ -83,6 +87,7 @@ public class OrderService {
                     orderDetails.getOrderType().getText(),
                     orderDetails.getServiceType().getMessage(lang),
                     order.getStatus().getMessage(lang),
+                    orderDetails.getLoad_weight(),
                     DateTimeUtil.formatDate(order.getOrderDateTime()),
                     DateTimeUtil.formatTime(order.getOrderDateTime()),
                     orderDetails.getUserFirstName(),
@@ -120,4 +125,8 @@ public class OrderService {
                 }).orElse(null);
     }
 
+    public void saveOrderDatailsWeight(TelegramUser user, int weight) {
+        user.setLoad_weight(String.valueOf(weight));
+        telegramUserRepo.save(user);
+    }
 }

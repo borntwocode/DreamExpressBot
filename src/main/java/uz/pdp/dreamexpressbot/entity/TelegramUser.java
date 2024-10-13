@@ -28,6 +28,7 @@ public class TelegramUser {
     private String username;
 
     private String orderType;
+    private String load_weight;
 
     private String serviceType;
 
@@ -50,7 +51,7 @@ public class TelegramUser {
     }
 
     public String formatOfficeOrderMessage(String message) {
-        return message.formatted(orderType, serviceType, firstName, phoneNumber);
+        return message.formatted(orderType, serviceType,load_weight,  firstName, phoneNumber);
     }
 
     public String formatProfileMessage(String message) {
@@ -58,7 +59,7 @@ public class TelegramUser {
     }
 
     public String formatHomeOrderMessage(String message) {
-        return message.formatted(orderType, serviceType, firstName, selectedCity, phoneNumber);
+        return message.formatted(orderType, serviceType, load_weight, firstName, selectedCity, phoneNumber);
     }
 
 }

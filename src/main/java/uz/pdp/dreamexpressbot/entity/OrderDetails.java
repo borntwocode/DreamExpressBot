@@ -27,6 +27,8 @@ public class OrderDetails {
 
     private String userAddress;
 
+    private String load_weight;
+
     private String userPhoneNumber;
 
     @OneToOne(cascade = CascadeType.PERSIST)

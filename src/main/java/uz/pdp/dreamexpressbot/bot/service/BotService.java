@@ -16,7 +16,6 @@ public interface BotService {
 
     void getFirstNameAndAskPhoneNumber(TelegramUser user, String text);
 
-    void getPhoneNumberAndShowMenu(TelegramUser user, String text);
     void getContactAndShowMenu(TelegramUser user, String text);
 
     void showMenu(TelegramUser user);
@@ -57,4 +56,5 @@ public interface BotService {
 
     void handleLocationMessages(TelegramUser user, Location location);
 
+    void handleBackToLoadWeight(TelegramUser user, String text);
 }

@@ -129,4 +129,11 @@ public class BotUtils {
         return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
     }
 
+    public Keyboard createServiceOnlyOfficeButtons(TelegramUser user) {
+        var keyboardMarkup = new ReplyKeyboardMarkup(
+                ServiceType.SEND_TO_OFFICE.getMessage(user)
+        );
+        keyboardMarkup.addRow(BotMessages.BACK.getMessage(user));
+        return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
+    }
 }
