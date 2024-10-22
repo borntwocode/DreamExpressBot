@@ -56,7 +56,7 @@ public class BotUpdateHandler {
             } else {
                 switch (user.getState()) {
                     case ENTERING_FIRST_NAME -> botService.getFirstNameAndAskPhoneNumber(user, text);
-                    case ENTERING_PHONE_NUMBER -> botService.getContactAndShowMenu(user, contact != null ? contact.phoneNumber() : null);
+                    case ENTERING_PHONE_NUMBER -> botService.getContactAndShowMenu(user, contact != null ? contact.phoneNumber() : (text));
                     case CHOOSING_MENU -> botService.handleMainMenu(user, text);
                     case GOING_BACK_TO_lOAD_WEIGHT -> botService.handleBackToLoadWeight(user, text);
                     case CHOOSING_SERVICE -> botService.handleServiceMenu(user, text);

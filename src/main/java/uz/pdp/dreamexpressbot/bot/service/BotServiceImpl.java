@@ -83,17 +83,7 @@ public class BotServiceImpl implements BotService {
         userService.changeUserState(user, TgState.ENTERING_PHONE_NUMBER);
     }
 
-//    @Override
-//    public void getContactAndShowMenu(TelegramUser user, String phoneNumber) {
-//        if (ValidationUtil.checkPhoneNumber(phoneNumber)) {
-//            userService.editPhoneNumber(user, phoneNumber);
-//            messageService.sendMessage(user, BotMessages.REGISTERED);
-//            showMenu(user);
-//        } else {
-//            messageService.sendMessage(user, BotMessages.INVALID_PHONE_NUMBER);
-//            askPhoneNumber(user);
-//        }
-//    }
+
 
     @Override
     public void getContactAndShowMenu(TelegramUser user, String phoneNumber) {
@@ -195,7 +185,6 @@ public class BotServiceImpl implements BotService {
 
         userService.editOrderType(user, OrderType.CONTAINER.getText());
         messageService.sendMessage(user, BotMessages.SERVICE_MENU_MESSAGE);
-//        userService.changeUserState(user, TgState.CHOOSING_SERVICE);
         messageService.sendMessage(user, BotMessages.LOAD_WEIGHT.getMessage(user));
         userService.changeUserState(user, TgState.GOING_BACK_TO_lOAD_WEIGHT);
 
@@ -481,7 +470,6 @@ public class BotServiceImpl implements BotService {
         int weight = 0;
         for (String number : numbersArray) {
             try {
-                // Check if the string is a valid integer
                 int num = Integer.parseInt(number);
                 weight += num;
             } catch (NumberFormatException e) {

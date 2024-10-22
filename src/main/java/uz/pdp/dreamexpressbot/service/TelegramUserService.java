@@ -7,6 +7,7 @@ import com.pengrad.telegrambot.model.Message;
 import uz.pdp.dreamexpressbot.entity.Location;
 import uz.pdp.dreamexpressbot.entity.Order;
 import uz.pdp.dreamexpressbot.entity.TelegramUser;
+import uz.pdp.dreamexpressbot.entity.enums.BotMessages;
 import uz.pdp.dreamexpressbot.entity.enums.Lang;
 import uz.pdp.dreamexpressbot.entity.enums.TgState;
 import uz.pdp.dreamexpressbot.repo.OrderRepo;
@@ -19,6 +20,7 @@ public class TelegramUserService {
 
     private final TelegramUserRepo telegramUserRepo;
     private final OrderRepo orderRepo;
+    private final MessageService messageService;
 
     public TelegramUser findUser(Message message) {
         Long chatId = message.chat().id();
@@ -57,20 +59,22 @@ public class TelegramUserService {
 
     public void editPhoneNumber(TelegramUser user, String phoneNumber) {
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
-            throw new IllegalArgumentException("Phone number cannot be null or empty.");
+            messageService.sendMessage(user, BotMessages.INVALID_PHONE_NUMBER);
         }
 
         // Remove spaces from the phone number
+        assert phoneNumber != null;
         String cleanedPhoneNumber = phoneNumber.replaceAll("\\s+", "");
 
         // Regular expressions for Uzbek numbers
-        String regexUzbekWithCode = "^\\+998\\d{9}$"; // +998 followed by 9 digits
-        String regexUzbekWithoutCode = "^\\d{9}$";    // 9 digits without country code
-        String regexUzbekWithoutPlus = "^998\\d{9}$"; // 998 followed by 9 digits without the +
+        String regexUzbekWithCode = "^\\+998\\d{9}$";  // +998 followed by 9 digits
+        String regexUzbekWithoutCode = "^\\d{9}$";     // 9 digits without country code
+        String regexUzbekWithoutPlus = "^998\\d{9}$";  // 998 followed by 9 digits without the +
 
         // Regular expressions for Korean numbers
-        String regexKoreanWithCode = "^\\+82\\d{8,10}$"; // +82 followed by 8 to 10 digits
-        String regexKoreanWithoutCode = "^010\\d{7,8}$"; // 010 followed by 7 or 8 digits
+        String regexKoreanWithCode = "^\\+82\\d{8,10}$";     // +82 followed by 8 to 10 digits
+        String regexKoreanWithoutCode = "^010\\d{7,8}$";     // 010 followed by 7 or 8 digits
+        String regexKoreanWithoutPlus = "^82\\d{8,10}$";     // 82 followed by 8 to 10 digits without the +
 
         String phoneWithCountryCode;
 
@@ -87,15 +91,16 @@ public class TelegramUserService {
             phoneWithCountryCode = "+82" + cleanedPhoneNumber.substring(1); // Remove leading '0' for Korean numbers
         } else if (cleanedPhoneNumber.matches(regexKoreanWithCode)) {
             phoneWithCountryCode = cleanedPhoneNumber;
+        } else if (cleanedPhoneNumber.matches(regexKoreanWithoutPlus)) {
+            phoneWithCountryCode = "+" + cleanedPhoneNumber; // Add the missing '+' sign
         } else {
-            throw new IllegalArgumentException("Invalid phone number format: " + cleanedPhoneNumber);
+            messageService.sendMessage(user, BotMessages.INVALID_PHONE_NUMBER);
+            return;
         }
 
-        // Set and save the updated phone number
         user.setPhoneNumber(phoneWithCountryCode);
         telegramUserRepo.save(user);
     }
-
 
 //    public static boolean checkPhoneNumber(String phoneNumber) {
 //        String cleanedPhoneNumber = phoneNumber.replaceAll(" ", "");
