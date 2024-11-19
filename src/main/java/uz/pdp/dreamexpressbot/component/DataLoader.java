@@ -6,12 +6,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import uz.pdp.dreamexpressbot.entity.TelegramUser;
 import uz.pdp.dreamexpressbot.entity.enums.Lang;
-import uz.pdp.dreamexpressbot.entity.enums.OrderType;
-import uz.pdp.dreamexpressbot.entity.enums.ServiceType;
+
+
 import uz.pdp.dreamexpressbot.entity.enums.TgState;
 import uz.pdp.dreamexpressbot.repo.TelegramUserRepo;
-import uz.pdp.dreamexpressbot.util.CityUtil;
+
 import uz.pdp.dreamexpressbot.util.FaqUtil;
+import uz.pdp.dreamexpressbot.util.RegionUtil;
 
 @Component
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        CityUtil cityUtil = CityUtil.getInstance();
+        RegionUtil regionUtil = RegionUtil.getInstance();
         FaqUtil faqUtil = FaqUtil.getInstance();
 
         if(ddl.equals("create")){

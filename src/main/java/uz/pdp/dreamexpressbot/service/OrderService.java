@@ -20,11 +20,11 @@ public class OrderService {
     public String getRawOrderMessage(TelegramUser user) {
         ServiceType serviceType = ServiceType.getFromText(user.getServiceType());
         switch (Objects.requireNonNull(serviceType)) {
-            case SEND_FROM_HOME -> {
+            case TAXI, YOL_YOLAKAY -> {
                 String message = BotMessages.RAW_HOME_ORDER_DETAILS.getMessage(user);
                 return user.formatHomeOrderMessage(message);
             }
-            case SEND_TO_OFFICE -> {
+            case MAIL -> {
                 String message = BotMessages.RAW_OFFICE_ORDER_DETAILS.getMessage(user);
                 return user.formatOfficeOrderMessage(message);
             }
@@ -41,7 +41,7 @@ public class OrderService {
                 .serviceType(serviceType)
                 .load_weight(user.getLoad_weight())
                 .build();
-        if (serviceType == ServiceType.SEND_FROM_HOME) {
+        if (serviceType == ServiceType.TAXI) {
             orderDetails.setUserAddress(user.getSelectedCity());
             orderDetails.setLocation(
                     Location.builder()
@@ -49,7 +49,7 @@ public class OrderService {
                             .longitude(user.getLongitude())
                             .build()
             );
-        } else if (serviceType == ServiceType.SEND_TO_OFFICE) {
+        } else if (serviceType == ServiceType.MAIL) {
             Photo photo = photoService.getPhoto(user.getPhotoFilePath());
             orderDetails.setPhoto(photo);
         }
@@ -66,7 +66,7 @@ public class OrderService {
     public String getOrderMessage(Order order, Lang lang) {
         OrderDetails orderDetails = order.getOrderDetails();
         ServiceType serviceType = ServiceType.getFromText(order.getUser().getServiceType());
-        if (serviceType == ServiceType.SEND_FROM_HOME) {
+        if (serviceType == ServiceType.TAXI) {
             String rawMessage = BotMessages.HOME_ORDER_DETAILS.getMessage(lang);
             return rawMessage.formatted(
                     order.getOrderNumber(),
@@ -114,7 +114,7 @@ public class OrderService {
     public boolean isOfficeService(Order order) {
         OrderDetails orderDetails = order.getOrderDetails();
         ServiceType serviceType = orderDetails.getServiceType();
-        return serviceType == ServiceType.SEND_TO_OFFICE;
+        return serviceType == ServiceType.TAXI;
     }
 
     public Order editStatus(UUID orderId, OrderStatus orderStatus) {

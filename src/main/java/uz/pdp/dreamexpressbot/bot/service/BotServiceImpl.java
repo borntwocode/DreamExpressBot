@@ -21,7 +21,7 @@ public class BotServiceImpl implements BotService {
     private final TelegramUserService userService;
     private final BotUtils botUtils;
     private final CompanyDetails companyDetails;
-    private final CityUtil cityUtil;
+    private final RegionUtil regionUtil;
     private final OrderService orderService;
     private final GroupService groupService;
     private final PhotoService photoService;
@@ -109,9 +109,12 @@ public class BotServiceImpl implements BotService {
 
     @Override
     public void handleMainMenu(TelegramUser user, String text) {
-        if (text.equals(OrderType.CONTAINER.getText())) {
+        if (text.equals(OrderType.TAXI.getText())) {
             showServiceMenu(user);
-        } else if (text.equals(OrderType.AVIA.getText())) {
+        } else if (text.equals(OrderType.MAIL.getText())) {
+            messageService.sendWithButton(user, BotMessages.AVIA_NOT_SUPPORTED, botUtils.createBackButton(user));
+            userService.changeUserState(user, TgState.GOING_BACK_TO_MAIN_MENU);
+        } else if (text.equals(OrderType.YOL_YOLAKAY.getText())){
             messageService.sendWithButton(user, BotMessages.AVIA_NOT_SUPPORTED, botUtils.createBackButton(user));
             userService.changeUserState(user, TgState.GOING_BACK_TO_MAIN_MENU);
         } else if (text.equals(BotMessages.MY_ORDERS.getMessage(user))) {
@@ -182,11 +185,12 @@ public class BotServiceImpl implements BotService {
     }
 
     private void showServiceMenu(TelegramUser user) {
+        userService.editOrderType(user, OrderType.TAXI.getText());
+        messageService.sendMessage(user, BotMessages.SERVICE_MENU);
+//        messageService.sendMessage(user, BotMessages.LOAD_WEIGHT.getMessage(user));
+//        userService.changeUserState(user, TgState.GOING_BACK_TO_lOAD_WEIGHT);
 
-        userService.editOrderType(user, OrderType.CONTAINER.getText());
-        messageService.sendMessage(user, BotMessages.SERVICE_MENU_MESSAGE);
-        messageService.sendMessage(user, BotMessages.LOAD_WEIGHT.getMessage(user));
-        userService.changeUserState(user, TgState.GOING_BACK_TO_lOAD_WEIGHT);
+        userService.changeUserState(user, TgState.CHOOSING_SERVICE);
 
 
     }
@@ -210,10 +214,12 @@ public class BotServiceImpl implements BotService {
             sendAlreadyOrderedMessage(user);
         } else {
             userService.editServiceType(user, serviceType.getMessage(user));
-            if (serviceType == ServiceType.SEND_FROM_HOME) {
+            if (serviceType == ServiceType.TAXI) {
                 sendCitiesButtons(user);
-            } else if (serviceType == ServiceType.SEND_TO_OFFICE) {
+            } else if (serviceType == ServiceType.MAIL) {
                 askPackagePhoto(user);
+            } else if (serviceType == ServiceType.YOL_YOLAKAY) {
+                sendCitiesButtons(user);
             }
         }
     }
@@ -268,7 +274,7 @@ public class BotServiceImpl implements BotService {
         String cityName = text.substring(5);
         if (cityName.equals(BotMessages.BACK.getMessage(user))) {
             showServiceMenu(user);
-        } else if (cityUtil.contains(cityName)) {
+        } else if (regionUtil.contains(cityName)) {
             userService.editSelectedCity(user, cityName);
             messageService.sendWithButton(user, BotMessages.SEND_LOCATION, botUtils.createLocationButton(user));
             userService.changeUserState(user, TgState.SENDING_LOCATION);
@@ -288,8 +294,8 @@ public class BotServiceImpl implements BotService {
         ServiceType serviceType = ServiceType.getFromText(user.getServiceType());
         if (text.equals(BotMessages.BACK.getMessage(user))) {
             switch (Objects.requireNonNull(serviceType)) {
-                case SEND_FROM_HOME -> sendCitiesButtons(user);
-                case SEND_TO_OFFICE -> askPackagePhoto(user);
+                case TAXI, YOL_YOLAKAY -> sendCitiesButtons(user);
+                case MAIL -> askPackagePhoto(user);
             }
         } else if (text.equals(BotMessages.SUBMIT.getMessage(user))) {
             handleSubmitOrder(user, serviceType);
@@ -304,9 +310,9 @@ public class BotServiceImpl implements BotService {
         String message = BotMessages.ORDER_CREATED.getMessage(user).formatted(order.getOrderNumber());
         messageService.sendWithButton(user, message, botUtils.createBackButton(user));
         switch (Objects.requireNonNull(serviceType)) {
-            case SEND_FROM_HOME ->
+            case TAXI, YOL_YOLAKAY ->
                     groupService.sendHomeOrder(order, orderService.getOrderMessage(order, user.getLang()));
-            case SEND_TO_OFFICE ->
+            case MAIL ->
                     groupService.sendOfficeOrder(order, orderService.getOrderMessage(order, user.getLang()));
         }
         userService.changeUserState(user, TgState.GOING_BACK_TO_MAIN_MENU);
@@ -482,11 +488,12 @@ public class BotServiceImpl implements BotService {
             messageService.sendMessage(user, BotMessages.CONFIRM.getMessage(user));
             messageService.sendWithButton(user, BotMessages.SERVICE_MENU_MESSAGE, botUtils.createServiceButtons(user));
             userService.changeUserState(user, TgState.CHOOSING_SERVICE);
-        } else {
-            orderService.saveOrderDatailsWeight(user, weight);
-            messageService.sendMessage(user, BotMessages.REJECT_WEIGHT.getMessage(user));
-            messageService.sendWithButton(user, BotMessages.SERVICE_MENU_MESSAGE, botUtils.createServiceOnlyOfficeButtons(user));
-            userService.changeUserState(user, TgState.CHOOSING_SERVICE);
+//        } else {
+//            orderService.saveOrderDatailsWeight(user, weight);
+//            messageService.sendMessage(user, BotMessages.REJECT_WEIGHT.getMessage(user));
+//            messageService.sendWithButton(user, BotMessages.SERVICE_MENU_MESSAGE, botUtils.createServiceOnlyOfficeButtons(user));
+//            userService.changeUserState(user, TgState.CHOOSING_SERVICE);
+//        }
         }
     }
 

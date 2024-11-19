@@ -7,18 +7,22 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum OrderType {
 
-    CONTAINER("\uD83D\uDEA2 Container"),
-    AVIA("\u2708\uFE0F Avia");
+
+    TAXI("Taxi buyurtma berish"),
+    MAIL("Pochta bor"),
+    YOL_YOLAKAY("Yo'l yolakay");
 
     private final String text;
 
     public static OrderType getFromText(String text) {
-        if (text.equals(CONTAINER.getText())) {
-            return CONTAINER;
-        } else if (text.equals(AVIA.getText())) {
-            return AVIA;
-        } else {
-            return null;
+        if (text.equals(TAXI.getText())) {
+            return TAXI;
+        } else if (text.equals(MAIL.getText())) {
+            return MAIL;
+        } else if (text.equals(YOL_YOLAKAY.getText()))
+            return YOL_YOLAKAY;
+        else {
+            return TAXI;
         }
     }
 

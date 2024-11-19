@@ -11,15 +11,17 @@ import uz.pdp.dreamexpressbot.entity.enums.OrderType;
 import uz.pdp.dreamexpressbot.entity.enums.ServiceType;
 import uz.pdp.dreamexpressbot.messages.BotConstants;
 import uz.pdp.dreamexpressbot.service.ChannelService;
-import uz.pdp.dreamexpressbot.util.CityUtil;
+
 import uz.pdp.dreamexpressbot.util.FaqUtil;
+import uz.pdp.dreamexpressbot.util.RegionUtil;
+
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class BotUtils {
 
-    private final CityUtil cityUtil;
+    private final RegionUtil cityUtil;
     private final ChannelService channelService;
     private final FaqUtil faqUtil;
 
@@ -34,8 +36,9 @@ public class BotUtils {
 
     public Keyboard createMenuButtons(TelegramUser user) {
         var keyboardMarkup = new ReplyKeyboardMarkup(
-                OrderType.CONTAINER.getText(),
-                OrderType.AVIA.getText()    
+                OrderType.TAXI.getText(),
+                OrderType.MAIL.getText(),
+                OrderType.YOL_YOLAKAY.getText()
         );
         keyboardMarkup.addRow(
                 BotMessages.MY_ORDERS.getMessage(user),
@@ -50,8 +53,9 @@ public class BotUtils {
 
     public Keyboard createServiceButtons(TelegramUser user) {
         var keyboardMarkup = new ReplyKeyboardMarkup(
-                ServiceType.SEND_FROM_HOME.getMessage(user),
-                ServiceType.SEND_TO_OFFICE.getMessage(user)
+                ServiceType.TAXI.getMessage(user),
+                ServiceType.MAIL.getMessage(user),
+                ServiceType.YOL_YOLAKAY.getMessage(user)
         );
         keyboardMarkup.addRow(BotMessages.BACK.getMessage(user));
         return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
@@ -71,7 +75,7 @@ public class BotUtils {
     }
 
     public Keyboard createCitiesButtons(TelegramUser user) {
-        var keyboardMarkup = cityUtil.getCityNameMarkup();
+        var keyboardMarkup = cityUtil.getRegionNameMarkup();
         String back = BotMessages.BACK.getMessage(user);
         keyboardMarkup.addRow(
                 new InlineKeyboardButton(back).callbackData("CITY_" + back)
@@ -129,11 +133,11 @@ public class BotUtils {
         return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
     }
 
-    public Keyboard createServiceOnlyOfficeButtons(TelegramUser user) {
-        var keyboardMarkup = new ReplyKeyboardMarkup(
-                ServiceType.SEND_TO_OFFICE.getMessage(user)
-        );
-        keyboardMarkup.addRow(BotMessages.BACK.getMessage(user));
-        return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
-    }
+//    public Keyboard createServiceOnlyOfficeButtons(TelegramUser user) {
+//        var keyboardMarkup = new ReplyKeyboardMarkup(
+//                ServiceType.SEND_TO_OFFICE.getMessage(user)
+//        );
+//        keyboardMarkup.addRow(BotMessages.BACK.getMessage(user));
+//        return keyboardMarkup.resizeKeyboard(true).oneTimeKeyboard(true);
+//    }
 }
