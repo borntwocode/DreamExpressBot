@@ -46,7 +46,7 @@ public class GroupService {
     public void editOrderMessage(Order order) {
         Integer messageId = order.getGroupMessageId();
         String newMessage = orderService.getOrderMessage(order, order.getLang());
-        if (order.getOrderDetails().getServiceType().equals(ServiceType.MAIL)) {
+        if (order.getOrderDetails().getServiceType().equals(ServiceType.SEND_TO_OFFICE)) {
             updateMessageCaption(messageId, newMessage);
         } else {
             updateMessageText(messageId, newMessage);

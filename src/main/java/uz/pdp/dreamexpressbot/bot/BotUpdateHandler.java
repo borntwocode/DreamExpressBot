@@ -58,9 +58,8 @@ public class BotUpdateHandler {
                     case ENTERING_FIRST_NAME -> botService.getFirstNameAndAskPhoneNumber(user, text);
                     case ENTERING_PHONE_NUMBER -> botService.getContactAndShowMenu(user, contact != null ? contact.phoneNumber() : (text));
                     case CHOOSING_MENU -> botService.handleMainMenu(user, text);
-                    case CHOOSING_SERVICE -> botService.handleServiceMenu(user, text);
-                    case CHOOSING_CITY -> botService.handleCityMenu(user, text);
                     case GOING_BACK_TO_lOAD_WEIGHT -> botService.handleBackToLoadWeight(user, text);
+                    case CHOOSING_SERVICE -> botService.handleServiceMenu(user, text);
                     case GOING_BACK_TO_SERVICE_MENU -> botService.handleBackToServiceMenu(user, text);
                     case GOING_BACK_TO_MAIN_MENU -> botService.handleBackToMainMenu(user, text);
                     case GOING_BACK_TO_PROFILE_MENU -> botService.handleBackToProfileMenu(user, text);

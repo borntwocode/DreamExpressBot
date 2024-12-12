@@ -20,8 +20,6 @@ public enum BotMessages {
     CHOOSE_FROM_MENU("\uD83D\uDCCC Menyudan tanlang:", "\uD83D\uDCCC Выберите из меню:"),
     AVIA_NOT_SUPPORTED("✈️ Hurmatli mijoz, avia xizmati hozircha mavjud emas.", "✈️ Уважаемый клиент, авиасервис пока недоступен."),
 
-    SERVICE_MENU("Qaysi O'rindiq  ", "из какого региона вы уезжаете?"),
-
     SERVICE_MENU_MESSAGE("""
        ❗ Agar yukingiz og'irligi:
        ▶️ 15 - 25 kg oralig'ida bo'lsa, faqatgina 🏢 ofisga yuborib berish xizmatidan foydalana olasiz.

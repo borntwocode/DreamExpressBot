@@ -7,25 +7,21 @@ import uz.pdp.dreamexpressbot.entity.TelegramUser;
 @Getter
 @AllArgsConstructor
 public enum ServiceType {
-//
-//    SEND_FROM_HOME("\uD83C\uDFE0 Uydan olib ketish", "\uD83C\uDFE0 Забрать из дома"),
-//    SEND_TO_OFFICE("\uD83D\uDCC5 Officega yuborib berish", "\uD83D\uDCC5 Отправить в офис"),
-    TAXI("Taxi buyurtma berish "," Заказать такси" ),
-    MAIL("Pochta bor", " Есть почтовое отделение "),
-    YOL_YOLAKAY("Yo'l yolakay", " по пути ");
+
+    SEND_FROM_HOME("\uD83C\uDFE0 Uydan olib ketish", "\uD83C\uDFE0 Забрать из дома"),
+    SEND_TO_OFFICE("\uD83D\uDCC5 Officega yuborib berish", "\uD83D\uDCC5 Отправить в офис");
 
     private final String uz;
     private final String ru;
 
     public static ServiceType getFromText(String text) {
-        if (text.equals(TAXI.getRu()) || text.equals(TAXI.getUz())) {
-            return TAXI;
-        } else if (text.equals(MAIL.getRu()) || text.equals(MAIL.getUz())) {
-            return MAIL;
-        } else if (text.equals(YOL_YOLAKAY.getRu()) || text.equals(YOL_YOLAKAY.getUz())) {
-            return YOL_YOLAKAY;
+        if (text.equals(SEND_FROM_HOME.getRu()) || text.equals(SEND_FROM_HOME.getUz())) {
+            return SEND_FROM_HOME;
+        } else if (text.equals(SEND_TO_OFFICE.getRu()) || text.equals(SEND_TO_OFFICE.getUz())) {
+            return SEND_TO_OFFICE;
+        } else {
+            return null;
         }
-        return TAXI;
     }
 
     public String getMessage(TelegramUser user) {
